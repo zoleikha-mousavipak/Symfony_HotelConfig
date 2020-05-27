@@ -59,38 +59,38 @@ class AppFixtures extends Fixture
     {
         // hotel 1
         $review = new Review();
-        $review->setHotel($this->Hotel[0]);
+        $review->setHotel($this->hotels[0]);
         $review->setComment('Very nice stay');
         $review->setScore(10);
         $manager->persist($review);
 
         $review = new Review();
-        $review->setHotel($this->Hotel[0]);
+        $review->setHotel($this->hotels[0]);
         $review->setComment('Average');
         $review->setScore(5);
         $manager->persist($review);
 
         $review = new Review();
-        $review->setHotel($this->Hotel[0]);
+        $review->setHotel($this->hotels[0]);
         $review->setComment('Very nice stay, I enjoyed it a lot.');
         $review->setScore(9);
         $manager->persist($review);
 
         $review = new Review();
-        $review->setHotel($this->Hotel[0]);
+        $review->setHotel($this->hotels[0]);
         $review->setComment('Worst experience ever.');
         $review->setScore(1);
         $manager->persist($review);
 
         // hotel 2
         $review = new Review();
-        $review->setHotel($this->Hotel[1]);
+        $review->setHotel($this->hotels[1]);
         $review->setComment('The receptionist was not smiling.');
         $review->setScore(5);
         $manager->persist($review);
 
         $review = new Review();
-        $review->setHotel($this->Hotel[1]);
+        $review->setHotel($this->hotels[1]);
         $review->setComment('Very nice stay, the reception was really fast.');
         $review->setScore(10);
         $manager->persist($review);

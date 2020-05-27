@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HotelRepository")
@@ -11,8 +12,8 @@ class Hotel
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var UuidInterface
+     * @ORM\Column(type="uuid", unique=true)
      */
     private $id;
 

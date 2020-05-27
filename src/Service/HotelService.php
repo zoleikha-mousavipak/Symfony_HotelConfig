@@ -29,7 +29,7 @@ class HotelService
     {
         $this->hotelRepository = $entityManager->getRepository(Hotel::class);
 
-        $this->riviewRepository = $entityManager->getRepository(Review::class);
+        $this->reviewRepository = $entityManager->getRepository(Review::class);
 
         $this->cache = $cache;
     }
