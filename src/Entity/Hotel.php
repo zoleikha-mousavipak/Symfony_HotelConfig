@@ -26,6 +26,11 @@ class Hotel
      */
     private $address;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="hotel")
+     */
+    private $reviews;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -56,6 +61,25 @@ class Hotel
     public function setAddress(?string $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReviews(): Review
+    {
+        return $this->reviews;
+    }
+
+    /**
+     * @param mixed $reviews
+     * @return self
+     */
+    public function setReviews(Review $reviews): self
+    {
+        $this->reviews = $reviews;
 
         return $this;
     }

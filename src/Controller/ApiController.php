@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\HotelService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,6 +10,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends AbstractController
 {
+    /**
+     * @var HotelService
+     */
+    protected $hotelService;
+
+    public function __construct(HotelService $hotelService)
+    {
+        $this->hotelService = $hotelService;
+    }
+
     /**
      * @Route("/api/average", name="average")
      */
@@ -20,10 +31,9 @@ class ApiController extends AbstractController
             throw new \Exception('Hotel not found.');
         }
 
-        $em = $this->getDoctrine();
-        $average = $em->getConnection()->executeQuery('SELECT avg(score) as score FROM review WHERE hotel_id = '.$hotelId)->fetch(\PDO::FETCH_ASSOC);
+        $averageScore = $this->hotelService->getHotelScore($hotelId);
 
-        return new Response($average['score']);
+        return new Response($averageScore);
     }
 
     /**
@@ -33,12 +43,7 @@ class ApiController extends AbstractController
     {
         $hotelId = $request->get('hotelId');
 
-        $em = $this->getDoctrine();
-        if ($hotelId === null) {
-            $reviews = $em->getConnection()->executeQuery('SELECT * FROM review')->fetchAll(\PDO::FETCH_ASSOC);
-        } else {
-            $reviews = $em->getConnection()->executeQuery('SELECT * FROM review WHERE hotel_id = ' . $hotelId)->fetchAll(\PDO::FETCH_ASSOC);
-        }
+        $reviews = $this->hotelService->getReviews($hotelId);
 
         return new Response(json_encode($reviews));
     }
@@ -48,8 +53,7 @@ class ApiController extends AbstractController
      */
     public function getHotels(Request $request)
     {
-        $em = $this->getDoctrine();
-        $hotels = $em->getConnection()->executeQuery('SELECT * FROM hotel')->fetchAll(\PDO::FETCH_ASSOC);
+        $hotels = $this->hotelService->getHotels();
 
         return new Response(json_encode($hotels));
     }
