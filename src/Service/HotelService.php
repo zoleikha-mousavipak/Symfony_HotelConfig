@@ -37,12 +37,14 @@ class HotelService
     /**
      * @param string $id
      * @return float
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getHotelScore(string $id): float
     {
         $item = $this->cache->getItem(self::CACHE_PREFIX . md5($id));
         if (!$item->isHit()) {
-            $item->set($this->reviewRepository->getAverageScoreById($id));
+            $item->set($this->reviewRepository->getAverageScoreByHotelId($id));
             $item->expiresAfter(self::CACHE_TTL);
             $this->cache->save($item);
         }
@@ -68,5 +70,14 @@ class HotelService
     public function getHotels(): array
     {
         return $this->hotelRepository->getAll();
+    }
+
+    /**
+     * @param string $groupId
+     * @return null|HotelGroup
+     */
+    public function getHotelsByGroupId(string $groupId)
+    {
+        return $this->hotelRepository->getHotelsByGroupId($groupId);
     }
 }

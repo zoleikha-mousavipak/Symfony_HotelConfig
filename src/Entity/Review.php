@@ -28,9 +28,10 @@ class Review
 
     /**
      * @var Hotel
-     * @ORM\ManyToOne(targetEntity = "App\Entity\Hotel", inversedBy = "reviews")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Hotel", inversedBy="reviews")
      */
     private $hotel;
+
 
     public function getScore(): ?int
     {
@@ -74,4 +75,6 @@ class Review
 
         return $this;
     }
+
+
 }

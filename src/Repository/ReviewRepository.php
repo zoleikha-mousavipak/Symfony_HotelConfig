@@ -22,16 +22,18 @@ class ReviewRepository extends ServiceEntityRepository
         parent::__construct($registry, Review::class);
     }
 
-    /**
+     /**
      * @param string $id
      * @return float|null
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getAverageScoreByHotelId(string $id): ?float
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->select('avg(review.score) as score')
             ->from(Review::class, 'review')
-            ->where('IDENTITY(review.hotel) = :HotelId')
+            ->where('IDENTITY(review.hotel) = :hotelId')
             ->setParameter('hotelId', $id);
 
         $result = $queryBuilder->getQuery()->getSingleScalarResult();

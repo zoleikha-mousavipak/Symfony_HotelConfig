@@ -31,4 +31,16 @@ class HotelRepository extends ServiceEntityRepository
 
         return $result;
     }
+
+    public function getHotelsByGroupId(string $groupId)
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        $queryBuilder->select('hotel')
+            ->from(Hotel::class, 'hotel')
+            ->where('IDENTITY((hotel.group) = :groupId')
+            ->setParameter('groupId', $groupId);
+
+        $queryBuilder->getQuery()->execute(null, Query::HYDRATE_ARRAY);
+    }
 }

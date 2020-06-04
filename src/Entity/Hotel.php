@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -13,6 +14,7 @@ class Hotel
     /**
      * @ORM\Id()
      * @var UuidInterface
+     *
      * @ORM\Column(type="uuid", unique=true)
      */
     private $id;
@@ -28,16 +30,23 @@ class Hotel
     private $address;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="hotel")
+     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="hotel", fetch="EAGER")
      */
     private $reviews;
 
-    public function getId(): ?int
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\HotelGroup", inversedBy="hotels", fetch="LAZY")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
+     */
+    private $group;
+
+
+    public function getId(): string
     {
-        return $this->id;
+        return $this->id->toString();
     }
 
-    public function setId($id)
+    public function setId(UuidInterface $id)
     {
         $this->id = $id;
     }
@@ -67,20 +76,31 @@ class Hotel
     }
 
     /**
-     * @return mixed
+     * @return PersistentCollection
      */
-    public function getReviews(): Review
+    public function getReviews(): PersistentCollection
     {
         return $this->reviews;
     }
 
     /**
-     * @param mixed $reviews
-     * @return self
+     * @param Review $reviews
+     * @return Hotel
      */
     public function setReviews(Review $reviews): self
     {
         $this->reviews = $reviews;
+
+        return $this;
+    }
+
+    /**
+     * @param HotelGroup $group
+     * @return Hotel
+     */
+    public function setGroup(HotelGroup $group): self
+    {
+        $this->group = $group;
 
         return $this;
     }
