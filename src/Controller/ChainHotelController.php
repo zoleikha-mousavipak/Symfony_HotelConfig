@@ -11,8 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ChainHotelController extends AbstractController
 {
-
-    /** @var HotelService */
+    /** @var HotelService  */
     protected $hotelService;
 
     public function __construct(HotelService $hotelService)
@@ -20,16 +19,19 @@ class ChainHotelController extends AbstractController
         $this->hotelService = $hotelService;
     }
 
+    /**
+     * @Route("/api/chain-hotels/hotels", name="chainHotels")
+     */
     public function getHotels(Request $request)
     {
         $groupId = $request->get('groupId');
 
         $hotels = $this->hotelService->getHotelsByGroupId($groupId);
 
-        if (empty($hotels)) {
+        if(empty($hotels)){
             throw new NotFoundHttpException('Group not found!');
         }
 
-        return new Response(json_decode($hotels));
+        return new Response(json_encode($hotels));
     }
 }

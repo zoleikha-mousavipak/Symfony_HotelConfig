@@ -11,20 +11,18 @@ use Ramsey\Uuid\UuidInterface;
  */
 class HotelGroup
 {
-
     /**
-     *@ORM(Id)
-     *@ORM\Column(type="uuid", unique=true)
+     * @ORM\Id()
+     * @ORM\Column(type="uuid", unique=true)
      * @var UuidInterface
      */
     private $id;
 
     /**
-     *@ORM\Column(type="string")
      * @var string
+     * @ORM\Column(type="string")hotel
      */
     private $name;
-
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Hotel", mappedBy="group")
@@ -46,6 +44,7 @@ class HotelGroup
     public function setId(UuidInterface $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -64,6 +63,7 @@ class HotelGroup
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -76,14 +76,13 @@ class HotelGroup
     }
 
     /**
-     * Undocumented function
-     *
      * @param Hotel[] $hotels
      * @return HotelGroup
      */
     public function setHotels(array $hotels): self
     {
         $this->hotels = $hotels;
+
         return $this;
     }
 }

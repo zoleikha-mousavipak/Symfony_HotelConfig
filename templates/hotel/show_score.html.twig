@@ -1,0 +1,15 @@
+
+var target = document.querySelector("body");
+
+var p = document.createElement('span');
+p.setAttribute("style", "font-weight:bold; vertical-align:middle");
+p.innerHTML = "{{ score }}";
+
+var div = document.createElement('div');
+div.setAttribute("style", "position:fixed; bottom:0; right:0; background-color:blue; width:100px; height:100px; color:white; text-weight:bold; text-align:center; line-height: 100px;");
+div.appendChild(p);
+
+var fragment = document.createDocumentFragment();
+fragment.appendChild(div);
+
+target.appendChild(fragment);

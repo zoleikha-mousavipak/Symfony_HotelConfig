@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+
 use App\Entity\Hotel;
+use App\Entity\HotelGroup;
 use App\Entity\Review;
 use App\Repository\HotelRepository;
 use App\Repository\ReviewRepository;
@@ -11,25 +13,23 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class HotelService
 {
-
-    /** @var HotelRepository */
-    protected $hotelRepository;
-
-    /** @var ReviewRepository */
+    /** @var ReviewRepository  */
     protected $reviewRepository;
 
-    /** @var AdapterInterface */
+    /** @var HotelRepository  */
+    protected $hotelRepository;
+
+    /** @var AdapterInterface  */
     private $cache;
 
     const CACHE_PREFIX = 'hotel_';
 
-    const CACHE_TTL = 60 * 60; // 1 hour
+    const CACHE_TTL = 60 * 60; //one hour
 
     public function __construct(EntityManagerInterface $entityManager, AdapterInterface $cache)
     {
-        $this->hotelRepository = $entityManager->getRepository(Hotel::class);
-
         $this->reviewRepository = $entityManager->getRepository(Review::class);
+        $this->hotelRepository = $entityManager->getRepository(Hotel::class);
 
         $this->cache = $cache;
     }
@@ -40,7 +40,7 @@ class HotelService
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getHotelScore(string $id): float
+    public function getHotelScore(string $id): ?float
     {
         $item = $this->cache->getItem(self::CACHE_PREFIX . md5($id));
         if (!$item->isHit()) {

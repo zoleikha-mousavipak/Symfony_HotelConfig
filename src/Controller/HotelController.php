@@ -8,18 +8,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiController extends AbstractController
+class HotelController extends AbstractController
 {
-    /**
-     * @var HotelService
-     */
     protected $hotelService;
 
     public function __construct(HotelService $hotelService)
     {
         $this->hotelService = $hotelService;
     }
-
     /**
      * @Route("/api/average", name="average")
      */
@@ -27,11 +23,11 @@ class ApiController extends AbstractController
     {
         $hotelId = $request->get('hotelId');
 
-        if ($hotelId === null) {
-            throw new \Exception('Hotel not found.');
-        }
-
         $averageScore = $this->hotelService->getHotelScore($hotelId);
+
+        if ($averageScore === null) {
+            throw new \Exception('Hotel score not found.');
+        }
 
         return new Response($averageScore);
     }
@@ -56,5 +52,48 @@ class ApiController extends AbstractController
         $hotels = $this->hotelService->getHotels();
 
         return new Response(json_encode($hotels));
+    }
+
+    /**
+     * @Route("widget/{uuid}.js", name="score_widget")
+     */
+    public function getWidget(string $uuid)
+    {
+        $averageScore = $this->hotelService->getHotelScore($uuid);
+
+        if ($averageScore === null) {
+            throw new \Exception('Hotel score not found.');
+        }
+
+        $renderedView =  $this->renderView(
+            'hotel/show_score.html.twig',
+            ['score' => $averageScore]
+        );
+
+        $response = new Response($renderedView);
+        $response->headers->set('Content-Type', 'text/javascript');
+
+        return $response;
+    }
+
+    /**
+     * @Route("widget-test/{uuid}.js", name="score_widget_test")
+     */
+    public function getWidgetTest(string $uuid)
+    {
+        $averageScore = $this->hotelService->getHotelScore($uuid);
+
+        if ($averageScore === null) {
+            throw new \Exception('Hotel score not found.');
+        }
+
+        $renderedView =  $this->renderView(
+            'base.html.twig',
+            ['score' => $averageScore]
+        );
+
+        $response = new Response($renderedView);
+
+        return $response;
     }
 }
