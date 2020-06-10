@@ -28,3 +28,19 @@ Please complete the task in three days.
 - create schema
 - load fixtures
 - use the `symfony serve` or the builtin php server for development
+
+
+/////////////////////////// 
+Rejection reasons :(
+
+1) Despite using PHP 7.4 in the application, the new features of the latest PHP version are not used. Return types are not specified for some of the methods (Look at the Controllers) or phpdoc is used to define class properties where in PHP 7.4 we can have typed class properties.
+
+2) Despite using Symfony, param converters are not used. Also instead caching inside a service, one could cache the response inside the Controller: https://symfony.com/doc/current/http_cache.html#expiration-caching . Also it makes sense to use JsonResonse in Symfony instead of Response when the response should be json, or even simply one can use $this->json([]) inside the controller to generate a json response.
+
+3) The HotelService class is over-engineering the code. The only useful job it does, is to cache the hotel-scores and that should be done in the Controller as explained above.
+
+4) Things like $request->get('groupId') are better to be avoided. We can use the route parameters.
+
+5) Database migrations are not how it should be. All those creating and dropping temporary tables seem unnecessary.
+
+6) Tests are not maintainable. Putting one long line of json in a test file doesn't make sense. It's better to separate those json strings to json files. Also it seems that not all the endpoints and scenarios are covered by tests.
